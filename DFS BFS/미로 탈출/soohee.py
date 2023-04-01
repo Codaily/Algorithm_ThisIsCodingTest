@@ -8,20 +8,30 @@ for i in range(n):
 dx = [1, 0, -1, 0 ] # 오른쪽 아래 왼쪽 위
 dy = [0, 1, 0, -1] 
 
+queue = deque([[0, 0, 1]])
+visited = [[False for _ in range(m)] for _ in range(n)]
+visited[0][0] = True
+def bfs(y, x, cnt):
+    
+    while queue:
+        y, x, cnt = queue.popleft()
+        if y == n-1 and x == m-1:
+            return cnt
+        for i in range(4):
+            ny, nx = y+dy[i], x+dx[i]
+            if ny >= 0 and nx >= 0 and ny < n and nx < m:
+                if graph[ny][nx] == 1 and visited[ny][nx] == False:
+                    visited[ny][nx] = True 
+                    queue.append([ny, nx, cnt+1])
+    return cnt
 
-def bfs(x, y): 
-    queue = deque()
-    queue.append((x,y)) 
-    while queue: 
-        x, y = queue.popleft() 
-        for i in range(4): 
-            nx, ny = x + dx[i], y + dy[i] 
-            if nx < 0 or  nx >= n or ny < 0  or ny >= m: 
-                continue 
-            if graph[nx][ny] == 0: 
-                continue 
-            if graph[nx][ny] == 1  : 
-                graph[nx][ny] = graph[x][y] + 1
-                queue.append((nx, ny)) 
-    return graph[n-1][m-1]
-print(bfs(0, 0))
+print(bfs(0, 0, 0))
+
+
+
+# 5 6
+# 101010
+# 111111
+# 000001
+# 111111
+# 111111
